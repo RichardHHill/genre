@@ -1,3 +1,7 @@
 tabItem(
-  tabName = "input_words"
+  tabName = "input_words",
+  fluidRow(
+    box(
+    )
+  )
 )

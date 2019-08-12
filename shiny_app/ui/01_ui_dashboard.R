@@ -7,5 +7,22 @@ tabItem(
       actionButton("submit_word", "Submit")
     )
   ),
-  h1("Gonna do some analytics")
+  fluidRow(
+    box(
+      fluidRow(
+        column(
+          2,
+          numericInput(
+            "suffix_length",
+            "Suffix Length",
+            value = 1,
+            min = 1
+          )
+        )
+      ),
+      fluidRow(
+        highchartOutput("suffix_chart")
+      )
+    )
+  )
 )

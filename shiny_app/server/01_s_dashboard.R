@@ -49,22 +49,52 @@ observeEvent(input$submit_word, {
       genre = info[[2]]
     )
     
-    tryCatch({
-      tychobratools::add_row(conn, "genre", out)
-      words_table_reload_trigger(words_table_reload_trigger() + 1)
-    }, error = function(error) {
-      session$sendCustomMessage(
-        "show_toast",
-        message = list(
+    if (out$word %in% words_table()$word) {
+      existing_genre <- words_table()$genre[[match(out$word, words_table()$word)]]
+      if (out$genre != existing_genre) {
+        shinyalert::shinyalert(
+          title = "Word already exists, and with different genre!",
+          text = existing_genre,
+          closeOnEsc = TRUE,
+          closeOnClickOutside = TRUE,
+          html = FALSE,
           type = "error",
-          title = "Error adding word",
-          message = NULL
+          showConfirmButton = TRUE,
+          showCancelButton = FALSE,
+          confirmButtonText = "OK",
+          confirmButtonCol = "#3c8dbc",
+          timer = 0,
+          imageUrl = "",
+          animation = TRUE
         )
-      )
-      print(error)
-    })
-    
-    updateTextInput(session, "add_word", value = "")
+      } else {
+        session$sendCustomMessage(
+          "show_toast",
+          message = list(
+            type = "error",
+            title = "Word already input",
+            message = NULL
+          )
+        )
+      }
+    } else {
+      tryCatch({
+        tychobratools::add_row(conn, "genre", out)
+        words_table_reload_trigger(words_table_reload_trigger() + 1)
+      }, error = function(error) {
+        session$sendCustomMessage(
+          "show_toast",
+          message = list(
+            type = "error",
+            title = "Error adding word",
+            message = NULL
+          )
+        )
+        print(error)
+      })
+      
+      updateTextInput(session, "add_word", value = "")
+    }
   }
 })
 
@@ -109,7 +139,6 @@ suffix_chart_prep <- reactive({
 
 output$suffix_chart <- renderHighchart({
   out <- suffix_chart_prep()
-  print(out)
   
   highchart() %>% 
     hc_chart(type = "column") %>% 
@@ -119,7 +148,7 @@ output$suffix_chart <- renderHighchart({
       )
     ) %>% 
     hc_xAxis(
-      categories = out$suffixes
+      categories = as.list(out$suffixes)
     ) %>% 
     hc_add_series(
       data = out$male,

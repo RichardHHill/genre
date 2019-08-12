@@ -26,6 +26,7 @@ body <- dashboardBody(
     tags$script(src = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"),
     tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
   ),
+  shinyalert::useShinyalert(),
   tabItems(
     source("ui/01_ui_dashboard.R", local = TRUE)$value,
     source("ui/02_ui_input_words.R", local = TRUE)$value

@@ -1,4 +1,27 @@
 
+observeEvent(input$accent_picker, {
+  updateTextInput(session, "add_word", value = paste0(input$add_word, input$accent_picker))
+  updatePickerInput(session, "accent_picker", selected = "æ")
+})
+
+accents <- reactive("àâæèéêëîïôùûüçœ")
+
+output$accent_buttons <- renderUI({
+  accents <- accents()
+  lapply(seq_len(nchar(accents)), function(i) {
+    char <- substr(accents , i, i)
+    actionButton(paste0("accent_button_", i), char, width = "3%")
+  })
+})
+
+observe({
+  lapply(seq_len(nchar(accents())), function(i) {
+    observeEvent(input[[paste0("accent_button_", i)]], {
+      updateTextInput(session, "add_word", value = paste0(input$add_word, substr(accents(), i, i)))
+    })
+  })
+})
+
 observeEvent(input$submit_word, {
   info <- strsplit(input$add_word, " ")[[1]]
   
@@ -28,6 +51,7 @@ observeEvent(input$submit_word, {
     
     tryCatch({
       tychobratools::add_row(conn, "genre", out)
+      words_table_reload_trigger(words_table_reload_trigger() + 1)
     }, error = function(error) {
       session$sendCustomMessage(
         "show_toast",
@@ -44,11 +68,16 @@ observeEvent(input$submit_word, {
   }
 })
 
-words_table <- reactiveVal(
-  conn %>% 
-    tbl("genre") %>% 
-    collect
-)
+words_table <- reactiveVal()
+words_table_reload_trigger <- reactiveVal(0)
+
+observeEvent(words_table_reload_trigger(), {
+  words_table(
+    conn %>% 
+      tbl("genre") %>% 
+      collect
+  )
+})
 
 suffix_chart_prep <- reactive({
   length <- input$suffix_length

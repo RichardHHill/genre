@@ -9,13 +9,13 @@ head <- dashboardHeader(
 sidebar <- dashboardSidebar(
   sidebarMenu(
     id = "sidebarmenu",
+    # menuItem(
+    #   text = "Dashboard",
+    #   tabName = "dashboard"
+    # ),
     menuItem(
-      text = "Dashboard",
-      tabName = "dashboard"
-    ),
-    menuItem(
-      text = "Input Words",
-      tabName = "input_words"
+      text = "Lexique",
+      tabName = "lexique"
     )
   )
 )
@@ -28,8 +28,8 @@ body <- dashboardBody(
   ),
   shinyalert::useShinyalert(),
   tabItems(
-    source("ui/01_ui_dashboard.R", local = TRUE)$value,
-    source("ui/02_ui_input_words.R", local = TRUE)$value
+    #source("ui/01_ui_dashboard.R", local = TRUE)$value,
+    source("ui/02_ui_lexique.R", local = TRUE)$value
   )
 )
 

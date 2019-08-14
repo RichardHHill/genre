@@ -103,8 +103,8 @@ words_table_reload_trigger <- reactiveVal(0)
 
 observeEvent(words_table_reload_trigger(), {
   words_table(
-    conn %>% 
-      tbl("genre") %>% 
+    conn %>%
+      tbl("genre") %>%
       collect
   )
 })

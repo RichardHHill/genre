@@ -9,11 +9,20 @@ tabItem(
       title = "filters",
       fluidRow(
         column(
-          12,
+          6,
           radioButtons(
             "lexique_suffix_length",
             "Suffix Length",
             choices = c("1" = "one", "2" = "two", "3" = "three", "4" = "four", "5" = "five"),
+            inline = TRUE
+          )
+        ),
+        column(
+          6,
+          radioButtons(
+            "lexique_order",
+            "Order",
+            choices = c("Number", "Female", "Male"),
             inline = TRUE
           )
         )
@@ -32,6 +41,10 @@ tabItem(
           numericInput("max_words", "Max Words", NA, min = 0)
         )
       )
+    ),
+    box(
+      width = 12,
+      highchartOutput("lexique_suffix_chart")
     )
   )
 )

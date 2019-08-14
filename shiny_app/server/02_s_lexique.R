@@ -1,6 +1,6 @@
 
-selected_data <- reactive(
-  lexique_data[[input$lexique_suffix_length]] %>% 
+selected_data <- reactive({
+  out <- lexique_data[[input$lexique_suffix_length]] %>% 
     mutate(
       total = male + femelle,
       percent_male = male / (total) * 100
@@ -11,15 +11,49 @@ selected_data <- reactive(
       if (is.na(input$min_words)) TRUE else total >= input$min_words,
       if (is.na(input$max_words)) TRUE else total <= input$max_words
     )
-)
+  
+  if (input$lexique_order == "Number") {
+    out %<>% arrange(desc(total))
+  } else if (input$lexique_order == "Female") {
+    out %<>% arrange(percent_male)
+  } else {
+    out %<>% arrange(desc(percent_male))
+  }
+  
+  out
+})
 
 output$lexique_suffix_table <- renderDT({
   datatable(
     selected_data(),
     rownames = FALSE,
-    colnames = c("Mâle", "Femelle", "Suffixe", "% Mâle")
+    colnames = c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle")
   ) %>% formatRound(
-    4,
+    5,
     digits = 2
   )
 })
+
+output$lexique_suffix_chart <- renderHighchart({
+  out <- selected_data()
+  
+  highchart() %>% 
+    hc_chart(type = "column") %>% 
+    hc_plotOptions(
+      column = list(
+        stacking = "normal"
+      )
+    ) %>% 
+    hc_xAxis(
+      categories = as.list(out$suffixe)
+    ) %>% 
+    hc_add_series(
+      data = out$male,
+      name = "male"
+    ) %>% 
+    hc_add_series(
+      data = out$femelle,
+      name = "femelle"
+    )
+})
+

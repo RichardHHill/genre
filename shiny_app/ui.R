@@ -16,6 +16,10 @@ sidebar <- dashboardSidebar(
     menuItem(
       text = "Lexique",
       tabName = "lexique"
+    ),
+    menuItem(
+      text = "Word Breakdown",
+      tabName = "single_word"
     )
   )
 )
@@ -29,7 +33,8 @@ body <- dashboardBody(
   shinyalert::useShinyalert(),
   tabItems(
     #source("ui/01_ui_dashboard.R", local = TRUE)$value,
-    source("ui/02_ui_lexique.R", local = TRUE)$value
+    source("ui/02_ui_lexique.R", local = TRUE)$value,
+    source("ui/03_ui_single_word.R", local = TRUE)$value
   )
 )
 

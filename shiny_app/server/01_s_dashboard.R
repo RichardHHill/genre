@@ -1,9 +1,4 @@
 
-observeEvent(input$accent_picker, {
-  updateTextInput(session, "add_word", value = paste0(input$add_word, input$accent_picker))
-  updatePickerInput(session, "accent_picker", selected = "æ")
-})
-
 accents <- reactive("àâæèéêëîïôùûüçœ")
 
 output$accent_buttons <- renderUI({

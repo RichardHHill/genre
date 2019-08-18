@@ -42,6 +42,15 @@ output$lexique_suffix_chart <- renderHighchart({
     hc_plotOptions(
       column = list(
         stacking = "normal"
+      ),
+      series = list(
+        allowPointSelect = TRUE,
+        point = list(
+          events = list(
+            #unselect = abb_unselect,
+            select = suf_select
+          )
+        )
       )
     ) %>% 
     hc_xAxis(
@@ -57,3 +66,22 @@ output$lexique_suffix_chart <- renderHighchart({
     )
 })
 
+suf_table_prep <- reactiveVal()
+
+observeEvent(input$sel_suf, {
+  suffix <- input$sel_suf
+  out <- complete_lexique %>%
+    filter(endsWith(word, as.character(input$sel_suf)))
+  
+  suf_table_prep(out)
+})
+
+output$suf_table <- renderDT({
+  out <- suf_table_prep()
+  
+  datatable(
+    out,
+    rownames = FALSE,
+    colnames = c("Word", "Genre")
+  )
+})

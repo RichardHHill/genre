@@ -45,6 +45,10 @@ tabItem(
     box(
       width = 12,
       highchartOutput("lexique_suffix_chart")
+    ),
+    box(
+      width = 12,
+      DTOutput("suf_table")
     )
   )
 )

@@ -13,5 +13,6 @@ fluidPage(
       align = "center",
       h1("Quiz")
     )
-  )
+  ),
+  uiOutput("quiz_questions")
 )

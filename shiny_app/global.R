@@ -5,6 +5,7 @@ library(highcharter)
 library(shinyWidgets)
 library(DT)
 library(magrittr)
+library(shinyjs)
 
 # Sys.setenv("R_CONFIG_ACTIVE" = "default")
 # app_config <- config::get()

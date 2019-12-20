@@ -41,6 +41,7 @@ body <- dashboardBody(
     tags$link(rel = "stylesheet", href = "https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css")
   ),
   shinyalert::useShinyalert(),
+  shinyjs::useShinyjs(),
   tabItems(
     source("ui/01_ui_study.R", local = TRUE)$value,
     source("ui/02_ui_lexique.R", local = TRUE)$value,
@@ -48,10 +49,18 @@ body <- dashboardBody(
   )
 )
 
-
-dashboardPage(
-  head,
-  sidebar,
-  body,
-  skin = "black"
+div(
+  div(
+    id = "main_page",
+    dashboardPage(
+      head,
+      sidebar,
+      body,
+      skin = "black"
+    )
+  ),
+  div(
+    id = "quiz_page",
+    source("ui/00_ui_quiz.R", local = TRUE)$value
+  ) %>% hidden()
 )

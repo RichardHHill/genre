@@ -19,10 +19,10 @@ sidebar <- dashboardSidebar(
   ),
   sidebarMenu(
     id = "sidebarmenu",
-    # menuItem(
-    #   text = "Dashboard",
-    #   tabName = "dashboard"
-    # ),
+    menuItem(
+      text = "Study",
+      tabName = "study"
+    ),
     menuItem(
       text = "Lexique",
       tabName = "lexique"
@@ -42,7 +42,7 @@ body <- dashboardBody(
   ),
   shinyalert::useShinyalert(),
   tabItems(
-    #source("ui/01_ui_dashboard.R", local = TRUE)$value,
+    source("ui/01_ui_study.R", local = TRUE)$value,
     source("ui/02_ui_lexique.R", local = TRUE)$value,
     source("ui/03_ui_single_word.R", local = TRUE)$value
   )

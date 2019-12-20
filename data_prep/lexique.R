@@ -4,7 +4,8 @@ library(magrittr)
 lexique <- readRDS("data_prep/provided/Lexique383.rds") %>% 
   filter(cgram == "NOM", !is.na(genre)) %>% 
   mutate(word = ifelse(substr(ortho, nchar(ortho), nchar(ortho)) %in% c("'", "."), substr(ortho, 1, nchar(ortho) - 1), ortho)) %>% 
-  select(word, genre) %T>% 
+  select(word, genre, freqlivres) %>% 
+  arrange(desc(freqlivres)) %T>% 
   saveRDS("shiny_app/data/lexique.RDS")
 
 save_for_suffix <- function(length) {

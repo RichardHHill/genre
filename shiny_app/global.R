@@ -34,3 +34,9 @@ suf_select = JS("function(event) {
 # 
 #   Shiny.setInputValue('unsel_state', { abb: event.target['hc-a2'] }, { priority: 'event' });
 # }")
+
+
+language_info <- tribble(
+  ~language, ~tableCols,
+  "french", c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle")
+)

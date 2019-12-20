@@ -7,6 +7,16 @@ head <- dashboardHeader(
 )
 
 sidebar <- dashboardSidebar(
+  pickerInput(
+    "language_selected",
+    "Language",
+    choices = list(
+      "French" = "french",
+      "Spanish" = "spanish",
+      "German" = "german",
+      "Italian" = "italian"
+      )
+  ),
   sidebarMenu(
     id = "sidebarmenu",
     # menuItem(

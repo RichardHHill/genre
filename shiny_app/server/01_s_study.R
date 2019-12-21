@@ -13,7 +13,7 @@ output$quiz_buttons <- renderUI({
       2,
       align = "center",
       actionButton(
-        paste0("quiz_button", i * 20 - 19, "_", i * 20), 
+        paste0("quiz_button", i * 20 - 19), 
         paste0(i * 20 - 19, "-", i * 20),
         style = paste0("color: #ffffff; background-color: ", rgb(red, green, blue), "; margin: 10px; width: 150px; height: 50px")
       )
@@ -21,8 +21,9 @@ output$quiz_buttons <- renderUI({
   })
 })
 
-observeEvent(input$quiz_1_20, {
-  question_numbers(1:20)
+observeEvent(input$js_quiz_selection, {
+  n <- as.numeric(input$js_quiz_selection)
+  question_numbers(n:(n + 19))
   
   showElement("quiz_page")
   hideElement("main_page")

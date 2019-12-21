@@ -1,12 +1,4 @@
-$(document).on('shiny:connected', function() {
-  // event handler to display a toast message
-  Shiny.addCustomMessageHandler(
-    "show_toast",
-    function(message) {
-      toastr[message.type](
-        message.title,
-        message.message
-      )
-    }
-  )
-});
+
+$(document).on("click", "#quiz_buttons .btn-default", function() {
+  Shiny.setInputValue("js_quiz_selection", this.id.substr(11), { priority: "event"});
+})

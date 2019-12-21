@@ -104,9 +104,16 @@ observeEvent(input$see_quiz_results, {
 
 output$quiz_results_table <- renderDT({
   out <- quiz_questions_table() %>% 
-    select(number, word, genre, correct)
+    mutate(genre = ifelse(genre == "m", "Mâle", "Femelle")) %>% 
+    select(word, genre, correct)
   
   datatable(
-    out
+    out,
+    colnames = c("Word", "Genre", "Correct"),
+    options = list(
+      dom = "t",
+      pageLength = length(question_numbers()),
+      ordering = FALSE
+    )
   )
 })

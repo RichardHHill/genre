@@ -53,9 +53,13 @@ fluidPage(
   ),
   div(
     id = "quiz_results_box",
-    box(
-      width = 12,
-      DTOutput("quiz_results_table")
+    fluidRow(
+      column(
+        4,
+        offset = 4,
+        align = "center",
+        DTOutput("quiz_results_table")
+      )
     )
   ) %>% hidden
 )

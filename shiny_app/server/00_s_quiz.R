@@ -6,7 +6,6 @@ observeEvent(input$end_quiz, {
 
 current_question <- reactiveVal(list(word = "", number = 1))
 last_question <- reactiveVal(NULL)
-quiz_complete <- reactiveVal(FALSE)
 quiz_questions_table <- reactiveVal(NULL)
   
 observeEvent(question_numbers(), {
@@ -29,7 +28,7 @@ observeEvent(input$quiz_select_m, {
   q <- quiz_questions_table()[n, ]
   
   if (n == length(question_numbers())) {
-    quiz_complete(TRUE)
+    showElement("see_quiz_results")
   } else {
     next_q <- quiz_questions_table()[n + 1, ]
     
@@ -52,7 +51,7 @@ observeEvent(input$quiz_select_f, {
   q <- quiz_questions_table()[n, ]
   
   if (n == length(question_numbers())) {
-    quiz_complete(TRUE)
+    showElement("see_quiz_results")
   } else {
     next_q <- quiz_questions_table()[n + 1, ]
     
@@ -89,4 +88,19 @@ output$quiz_answer_feedback <- renderValueBox({
 
 output$quiz_current_word <- renderText({
   paste0(current_question()$number, ". ", current_question()$word)
+})
+
+
+observeEvent(input$see_quiz_results, {
+  showElement("quiz_results_box")
+  hideElement("quiz_content")
+})
+
+output$quiz_results_table <- renderDT({
+  out <- quiz_questions_table() %>% 
+    select(number, word, genre, correct)
+  
+  datatable(
+    out
+  )
 })

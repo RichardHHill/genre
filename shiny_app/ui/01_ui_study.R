@@ -10,10 +10,7 @@ tabItem(
       )
     ),
     fluidRow(
-      column(
-        3,
-        actionButton("quiz_1_20", "1 - 20")
-      )
+      uiOutput("quiz_buttons")
     )
   )
 )

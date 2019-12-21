@@ -2,6 +2,12 @@
 observeEvent(input$end_quiz, {
   hideElement("quiz_page")
   showElement("main_page")
+  
+  hideElement("quiz_results_box")
+  showElement("quiz_content")
+  
+  last_question(NULL)
+  quiz_questions_table(NULL)
 })
 
 current_question <- reactiveVal(list(word = "", number = 1))

@@ -4,26 +4,89 @@ observeEvent(input$end_quiz, {
   showElement("main_page")
 })
 
-quiz_questions_prep <- reactive({
+current_question <- reactiveVal(list(word = "", number = 1))
+last_question <- reactiveVal(NULL)
+quiz_complete <- reactiveVal(FALSE)
+quiz_questions_table <- reactiveVal(NULL)
+  
+observeEvent(question_numbers(), {
+  req(length(question_numbers()) > 0)
   out <- lexique[question_numbers(), ]
   
-  out[sample(nrow(out)), ]
+  out <- out[sample(nrow(out)), ] %>% 
+    mutate(
+      number = seq_len(nrow(out)),
+      correct = TRUE
+    )
+  
+  current_question(list(word = out$word[[1]], number = 1))
+  
+  quiz_questions_table(out)
 })
 
-output$quiz_questions <- renderUI({
-  lapply(quiz_questions_prep()$word, function(i) {
-    fluidRow(
-      column(
-        4, 
-        offset = 2,
-        align = "center",
-        h3(i)
-      ),
-      column(
-        4,
-        align = "center",
-        checkboxGroupInput(paste0("question_", i), "", choices = c("Mâle", "Femelle"), inline = TRUE)
-      )
-    )
-  })
+observeEvent(input$quiz_select_m, {
+  n <- current_question()$number
+  q <- quiz_questions_table()[n, ]
+  
+  if (n == length(question_numbers())) {
+    quiz_complete(TRUE)
+  } else {
+    next_q <- quiz_questions_table()[n + 1, ]
+    
+    current_question(list(word = next_q$word, number = q$number + 1))
+  }
+  
+  if (q$genre == "m") {
+    last_question(list(correct = TRUE, word = q$word, genre = "Mâle"))
+  } else {
+    last_question(list(correct = FALSE, word = q$word, genre = "Femelle"))
+    
+    new_table <- quiz_questions_table()
+    new_table$correct[[n]] <- FALSE
+    quiz_questions_table(new_table)
+  }
+})
+
+observeEvent(input$quiz_select_f, {
+  n <- current_question()$number
+  q <- quiz_questions_table()[n, ]
+  
+  if (n == length(question_numbers())) {
+    quiz_complete(TRUE)
+  } else {
+    next_q <- quiz_questions_table()[n + 1, ]
+    
+    current_question(list(word = next_q$word, number = q$number + 1))
+  }
+  
+  if (q$genre == "f") {
+    last_question(list(correct = TRUE, word = q$word, genre = "Femelle"))
+  } else {
+    last_question(list(correct = FALSE, word = q$word, genre = "Mâle"))
+    
+    new_table <- quiz_questions_table()
+    new_table$correct[[n]] <- FALSE
+    quiz_questions_table(new_table)
+  }
+})
+
+output$quiz_answer_feedback <- renderValueBox({
+  req(current_question()$number > 1)
+  if (last_question()$correct) {
+    v <- "Correct"
+    color <- "green"
+  } else {
+    v <- "Incorrect"
+    color <- "red"
+  }
+  
+  valueBox(
+    v,
+    paste0("\"", last_question()$word, "\" is ", last_question()$genre),
+    color = color
+  )
+})
+
+output$quiz_current_word <- renderText({
+  paste0(current_question()$number, ". ", current_question()$word)
 })

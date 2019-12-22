@@ -7,16 +7,6 @@ head <- dashboardHeader(
 )
 
 sidebar <- dashboardSidebar(
-  pickerInput(
-    "language_selected",
-    "Language",
-    choices = list(
-      "French" = "french",
-      "Spanish" = "spanish",
-      "German" = "german",
-      "Italian" = "italian"
-      )
-  ),
   sidebarMenu(
     id = "sidebarmenu",
     menuItem(
@@ -24,8 +14,8 @@ sidebar <- dashboardSidebar(
       tabName = "study"
     ),
     menuItem(
-      text = "Lexique",
-      tabName = "lexique"
+      text = "Suffix Data",
+      tabName = "suffix_analysis"
     ),
     menuItem(
       text = "Word Breakdown",
@@ -44,7 +34,7 @@ body <- dashboardBody(
   shinyjs::useShinyjs(),
   tabItems(
     source("ui/01_ui_study.R", local = TRUE)$value,
-    source("ui/02_ui_lexique.R", local = TRUE)$value,
+    source("ui/02_ui_suffix.R", local = TRUE)$value,
     source("ui/03_ui_single_word.R", local = TRUE)$value
   )
 )

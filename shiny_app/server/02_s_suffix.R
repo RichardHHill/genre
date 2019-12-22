@@ -47,7 +47,6 @@ output$lexique_suffix_chart <- renderHighchart({
         allowPointSelect = TRUE,
         point = list(
           events = list(
-            #unselect = abb_unselect,
             select = suf_select
           )
         )
@@ -71,12 +70,14 @@ suf_table_prep <- reactiveVal()
 observeEvent(input$sel_suf, {
   suffix <- input$sel_suf
   out <- complete_lexique %>%
-    filter(endsWith(word, as.character(input$sel_suf)))
+    filter(endsWith(word, as.character(input$sel_suf))) %>% 
+    select(word, genre)
   
   suf_table_prep(out)
 })
 
 output$suf_table <- renderDT({
+  req(suf_table_prep())
   out <- suf_table_prep()
   
   datatable(

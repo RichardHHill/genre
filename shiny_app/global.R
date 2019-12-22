@@ -31,8 +31,3 @@ suf_select = JS("function(event) {
 
 }")
 
-
-language_info <- tribble(
-  ~language, ~tableCols,
-  "french", c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle")
-)

@@ -1,12 +1,8 @@
 tabItem(
-  tabName = "lexique",
+  tabName = "suffix_analysis",
   fluidRow(
     box(
-      title = "table",
-      DTOutput("lexique_suffix_table")
-    ),
-    box(
-      title = "filters",
+      title = "Filters",
       fluidRow(
         column(
           6,
@@ -21,7 +17,7 @@ tabItem(
           6,
           radioButtons(
             "lexique_order",
-            "Order",
+            "Chart Order",
             choices = c("Number", "Female", "Male"),
             inline = TRUE
           )
@@ -34,20 +30,38 @@ tabItem(
         ),
         column(
           4,
-          numericInput("min_words", "Min Words", NA, min = 0)
+          numericInput("min_words", "Min Words", 100, min = 0)
         ),
         column(
           4,
           numericInput("max_words", "Max Words", NA, min = 0)
         )
+      ),
+      br(),
+      fluidRow(
+        column(
+          12,
+          align = "center",
+          h3("Use these filters to analyze genre frequencies of different suffixes. Click on the graph or table to see all words of a single suffix.")
+        )
       )
     ),
     box(
-      width = 12,
-      highchartOutput("lexique_suffix_chart")
-    ),
+      title = "Suffix Table",
+      DTOutput("lexique_suffix_table")
+    )
+  ),
+  fluidRow(
     box(
       width = 12,
+      title = "Suffix Chart",
+      highchartOutput("lexique_suffix_chart")
+    )
+  ),
+  fluidRow(
+    box(
+      width = 12,
+      title = "Suffix Drilldown",
       DTOutput("suf_table")
     )
   )

@@ -7,16 +7,16 @@ fluidPage(
       actionButton("end_quiz", "End Quiz", style = "color: #ffffff; background-color: #c62300")
     )
   ),
-  fluidRow(
-    column(
-      12,
-      align = "center",
-      h1("Quiz")
-    )
-  ),
-  br(),
   div(
     id = "quiz_content",
+    fluidRow(
+      column(
+        12,
+        align = "center",
+        h1("Quiz")
+      )
+    ),
+    br(),
     fluidRow(
       column(
         12,
@@ -27,15 +27,21 @@ fluidPage(
     br(),
     fluidRow(
       column(
-        4,
-        offset = 2,
-        align = "center",
-        actionButton("quiz_select_m", "Mâle")
+        6,
+        align = "right",
+        actionButton(
+          "quiz_select_f",
+          "Femelle (f)",
+          style = "background-color: #F7AC2A; width: 300px; height: 300px; font-size: 25px;"
+        )
       ),
       column(
-        4,
-        align = "center",
-        actionButton("quiz_select_f", "Femelle")
+        6,
+        actionButton(
+          "quiz_select_m",
+          "Mâle (m)",
+          style = "background-color: #DC99F3; width: 300px; height: 300px; font-size: 25px;"
+        )
       )
     ),
     br(),
@@ -53,6 +59,13 @@ fluidPage(
   ),
   div(
     id = "quiz_results_box",
+    fluidRow(
+      column(
+        12,
+        align = "center",
+        h1("Quiz Results")
+      )
+    ),
     fluidRow(
       column(
         4,

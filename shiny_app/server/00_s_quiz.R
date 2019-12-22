@@ -29,7 +29,10 @@ observeEvent(question_numbers(), {
   quiz_questions_table(out)
 })
 
-observeEvent(input$quiz_select_m, {
+observeEvent({
+  input$quiz_select_m
+  input$type_select_m
+  }, {
   n <- current_question()$number
   q <- quiz_questions_table()[n, ]
   
@@ -52,7 +55,10 @@ observeEvent(input$quiz_select_m, {
   }
 })
 
-observeEvent(input$quiz_select_f, {
+observeEvent({
+  input$quiz_select_f
+  input$type_select_f
+  }, {
   n <- current_question()$number
   q <- quiz_questions_table()[n, ]
   
@@ -103,6 +109,7 @@ observeEvent(input$see_quiz_results, {
 })
 
 output$quiz_results_table <- renderDT({
+  req(quiz_questions_table())
   out <- quiz_questions_table() %>% 
     mutate(genre = ifelse(genre == "m", "Mâle", "Femelle")) %>% 
     select(word, genre, correct)

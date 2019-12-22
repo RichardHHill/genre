@@ -68,6 +68,13 @@ fluidPage(
     ),
     fluidRow(
       column(
+        12,
+        align = "center",
+        h2(textOutput("quiz_results_score"))
+      )
+    ),
+    fluidRow(
+      column(
         4,
         offset = 4,
         align = "center",

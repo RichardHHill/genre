@@ -119,10 +119,21 @@ observeEvent(c(input$see_quiz_results, input$key_enter), {
   hideElement("quiz_content")
 })
 
+output$quiz_results_score <- renderText({
+  req(quiz_questions_table())
+  
+  score <- quiz_questions_table() %>% 
+    filter(correct) %>% 
+    nrow()
+  
+  paste0(score, "/", length(question_numbers()))
+})
+
 output$quiz_results_table <- renderDT({
   req(quiz_questions_table())
   out <- quiz_questions_table() %>% 
     mutate(genre = ifelse(genre == "m", "Mâle", "Femelle")) %>% 
+    mutate(correct = ifelse(correct, "&#9989", "&#10060")) %>% 
     select(word, genre, correct)
   
   datatable(
@@ -132,6 +143,7 @@ output$quiz_results_table <- renderDT({
       dom = "t",
       pageLength = length(question_numbers()),
       ordering = FALSE
-    )
+    ),
+    escape = FALSE
   )
 })

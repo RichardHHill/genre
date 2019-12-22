@@ -5,3 +5,4 @@
 *.yml
 shiny_app/data/
 data_prep/provided/
+/shiny_app/rsconnect

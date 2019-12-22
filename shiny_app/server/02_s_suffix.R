@@ -1,5 +1,7 @@
 
-selected_data <- reactive({
+selected_data <- reactiveVal(NULL)
+
+observe({
   out <- lexique_data[[input$lexique_suffix_length]] %>% 
     mutate(
       total = male + femelle,
@@ -20,12 +22,14 @@ selected_data <- reactive({
     out %<>% arrange(desc(percent_male))
   }
   
-  out
+  selected_data(out)
+  
+  if (!is.null(selected_data)) replaceData(lexique_suffix_table_proxy, out, rownames = FALSE)
 })
 
 output$lexique_suffix_table <- renderDT({
   datatable(
-    selected_data(),
+    isolate(selected_data()),
     rownames = FALSE,
     colnames = c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle"),
     selection = "single",
@@ -34,6 +38,8 @@ output$lexique_suffix_table <- renderDT({
     digits = 2
   )
 })
+
+lexique_suffix_table_proxy <- dataTableProxy("lexique_suffix_table")
 
 output$lexique_suffix_chart <- renderHighchart({
   out <- selected_data()
@@ -78,10 +84,18 @@ observeEvent(input$sel_suf, {
   updateTextInput(session, "drilldown_suffix", value = suffix)
 })
 
-suf_table_prep <- reactive({
-  complete_lexique %>% 
+suf_table_prep <- reactiveVal(NULL)
+
+observe({
+  out <- complete_lexique %>% 
     filter(endsWith(word, input$drilldown_suffix)) %>% 
     select(word, genre)
+  
+  if (is.null(suf_table_prep())) {
+    suf_table_prep(out)
+  } else {
+    replaceData(suf_table_proxy, out, rownames = FALSE)
+  }
 })
 
 output$suf_table <- renderDT({
@@ -94,3 +108,5 @@ output$suf_table <- renderDT({
     colnames = c("Word", "Genre")
   )
 })
+
+suf_table_proxy <- dataTableProxy("suf_table")

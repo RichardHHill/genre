@@ -17,7 +17,7 @@ quiz_questions_table <- reactiveVal(NULL)
   
 observeEvent(question_numbers(), {
   req(length(question_numbers()) > 0)
-  out <- lexique[question_numbers(), ]
+  out <- complete_lexique[question_numbers(), ]
   
   out <- out[sample(nrow(out)), ] %>% 
     mutate(

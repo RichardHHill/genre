@@ -1,5 +1,5 @@
 
-observeEvent(input$end_quiz, {
+observeEvent(c(input$end_quiz, input$key_esc), {
   hideElement("quiz_page")
   showElement("main_page")
   
@@ -30,7 +30,7 @@ observeEvent(question_numbers(), {
   quiz_questions_table(out)
 })
 
-observeEvent(c(input$quiz_select_m, input$type_select_m), {
+observeEvent(c(input$quiz_select_m, input$key_m), {
   req(quiz_questions_table())
   
   n <- current_question()$number
@@ -57,7 +57,7 @@ observeEvent(c(input$quiz_select_m, input$type_select_m), {
   }
 })
 
-observeEvent(c(input$quiz_select_f, input$type_select_f), {
+observeEvent(c(input$quiz_select_f, input$key_f), {
   req(quiz_questions_table())
   
   n <- current_question()$number
@@ -113,7 +113,7 @@ output$quiz_current_word <- renderText({
 })
 
 
-observeEvent(c(input$see_quiz_results, input$type_see_quiz_results), {
+observeEvent(c(input$see_quiz_results, input$key_enter), {
   req(quiz_questions_table())
   showElement("quiz_results_box")
   hideElement("quiz_content")

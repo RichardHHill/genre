@@ -27,7 +27,8 @@ output$lexique_suffix_table <- renderDT({
   datatable(
     selected_data(),
     rownames = FALSE,
-    colnames = c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle")
+    colnames = c("Mâle", "Femelle", "Suffixe", "Total", "% Mâle"),
+    selection = "single",
   ) %>% formatRound(
     5,
     digits = 2
@@ -65,15 +66,22 @@ output$lexique_suffix_chart <- renderHighchart({
     )
 })
 
-suf_table_prep <- reactiveVal()
+observeEvent(input$lexique_suffix_table_rows_selected, {
+  suffix <- selected_data()$suffixe[[input$lexique_suffix_table_rows_selected]]
+  
+  updateTextInput(session, "drilldown_suffix", value = suffix)
+})
 
 observeEvent(input$sel_suf, {
-  suffix <- input$sel_suf
-  out <- complete_lexique %>%
-    filter(endsWith(word, as.character(input$sel_suf))) %>% 
-    select(word, genre)
+  suffix <- as.character(input$sel_suf)
   
-  suf_table_prep(out)
+  updateTextInput(session, "drilldown_suffix", value = suffix)
+})
+
+suf_table_prep <- reactive({
+  complete_lexique %>% 
+    filter(endsWith(word, input$drilldown_suffix)) %>% 
+    select(word, genre)
 })
 
 output$suf_table <- renderDT({

@@ -15,3 +15,7 @@ $(document).on("keyup", function(e) {
   }
 });
 
+
+$(document).on("click", "#lexique_suffix_table tbody tr", function() {
+  $('html, body').animate({scrollTop: $(document).height()}, 'slow');
+});

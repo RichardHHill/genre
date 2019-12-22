@@ -62,6 +62,13 @@ tabItem(
     box(
       width = 12,
       title = "Suffix Drilldown",
+      fluidRow(
+        column(
+          12,
+          align = "center",
+          textInput("drilldown_suffix", "")
+        )
+      ),
       DTOutput("suf_table")
     )
   )

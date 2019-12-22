@@ -8,6 +8,7 @@ observeEvent(input$end_quiz, {
   
   last_question(NULL)
   quiz_questions_table(NULL)
+  question_numbers(NULL)
 })
 
 current_question <- reactiveVal(list(word = "", number = 1))
@@ -29,19 +30,20 @@ observeEvent(question_numbers(), {
   quiz_questions_table(out)
 })
 
-observeEvent({
-  input$quiz_select_m
-  input$type_select_m
-  }, {
+observeEvent(c(input$quiz_select_m, input$type_select_m), {
+  req(quiz_questions_table())
+  
   n <- current_question()$number
+  req(n <= length(question_numbers()))
+  
   q <- quiz_questions_table()[n, ]
   
   if (n == length(question_numbers())) {
     showElement("see_quiz_results")
+    current_question(list(word = "", number = n + 1))
   } else {
     next_q <- quiz_questions_table()[n + 1, ]
-    
-    current_question(list(word = next_q$word, number = q$number + 1))
+    current_question(list(word = next_q$word, number = n + 1))
   }
   
   if (q$genre == "m") {
@@ -55,19 +57,20 @@ observeEvent({
   }
 })
 
-observeEvent({
-  input$quiz_select_f
-  input$type_select_f
-  }, {
+observeEvent(c(input$quiz_select_f, input$type_select_f), {
+  req(quiz_questions_table())
+  
   n <- current_question()$number
+  req(n <= length(question_numbers()))
+  
   q <- quiz_questions_table()[n, ]
   
   if (n == length(question_numbers())) {
     showElement("see_quiz_results")
+    current_question(list(word = "", number = n + 1))
   } else {
     next_q <- quiz_questions_table()[n + 1, ]
-    
-    current_question(list(word = next_q$word, number = q$number + 1))
+    current_question(list(word = next_q$word, number = n + 1))
   }
   
   if (q$genre == "f") {
@@ -82,6 +85,7 @@ observeEvent({
 })
 
 output$quiz_answer_feedback <- renderValueBox({
+  req(quiz_questions_table())
   req(current_question()$number > 1)
   if (last_question()$correct) {
     v <- "Correct"
@@ -99,11 +103,18 @@ output$quiz_answer_feedback <- renderValueBox({
 })
 
 output$quiz_current_word <- renderText({
-  paste0(current_question()$number, ". ", current_question()$word)
+  req(question_numbers())
+  
+  if (current_question()$number > length(question_numbers())) {
+    "Quiz Complete"
+  } else {
+    paste0(current_question()$number, ". ", current_question()$word)
+  }
 })
 
 
-observeEvent(input$see_quiz_results, {
+observeEvent(c(input$see_quiz_results, input$type_see_quiz_results), {
+  req(quiz_questions_table())
   showElement("quiz_results_box")
   hideElement("quiz_content")
 })

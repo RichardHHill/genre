@@ -9,6 +9,7 @@ tabItem(
         h1("Select Quiz")
       )
     ),
+    br(),
     fluidRow(
       uiOutput("quiz_buttons")
     )

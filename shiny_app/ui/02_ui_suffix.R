@@ -64,7 +64,8 @@ tabItem(
       title = "Suffix Drilldown",
       fluidRow(
         column(
-          12,
+          2,
+          offset = 5,
           align = "center",
           textInput("drilldown_suffix", "")
         )

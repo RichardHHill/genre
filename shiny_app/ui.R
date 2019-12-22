@@ -1,6 +1,6 @@
 
 head <- dashboardHeader(
-  title = "Dashboard",
+  title = "Genre",
   tags$li(
     class = "dropdown"
   )
